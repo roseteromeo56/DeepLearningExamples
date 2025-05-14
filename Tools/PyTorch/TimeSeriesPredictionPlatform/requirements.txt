@@ -4,7 +4,7 @@ matplotlib==3.3.2
 wget==3.2
 hydra-core==1.1.1
 pyunpack==0.2.2
-py7zr==0.15.0
+py7zr==0.20.2
 patool==1.12
 tensorboard
 optuna
