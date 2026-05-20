@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 networkx==2.5
-onnx==1.17.0
+onnx==1.21.0
 onnxruntime==1.5.2
 pycuda>=2019.1.2
 PyYAML>=5.2
-tqdm>=4.44.1
+tqdm>=4.67.3
 tabulate>=0.8.7
 natsort>=7.0.0
 # use tags instead of branch names - because there might be docker cache hit causing not fetching most recent changes on branch
