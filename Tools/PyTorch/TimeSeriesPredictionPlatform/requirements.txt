@@ -9,12 +9,12 @@ patool==1.12
 tensorboard
 optuna
 optuna-dashboard
-mlflow==2.20.3
+mlflow==3.11.0rc1
 pandas==1.4.3
 tables
 einops==0.4.0
 opt-einsum==3.3.0
 pykeops==1.5
-gdown==4.7.1
+gdown==5.2.2
 xgboost==1.7.3
 wandb
