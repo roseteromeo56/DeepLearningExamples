@@ -6,4 +6,4 @@ scikit-learn==1.5.1
 pynvml==8.0.4
 fsspec==0.8.0
 scikit-image==0.18.2
-tqdm==4.62
+tqdm==4.66.3
