@@ -83,15 +83,17 @@ if [[ $gpus == 1 ]]; then
         /workspace/moflow_pyt/moflow/runtime/train.py \
         --cuda_graph \
         --learning_rate 0.0001 \
-        ${flags} \
+        ${flags} \ dd/fix/moflow-train-shell-injection
+        "$@"
         "$@" dd/fix-command-injection-train-sh
 set -x dd/fix-sast-vulnerability-train-sh
 bash -c "${cmd}" && bash -c "${eval_cmd}"
-bash -c "exec '$0' '$@'" _ "${cmd}" "&&" "${eval_cmd}"
+bash -c "exec '$0' '$@'" _ "${cmd}" "&&" "${eval_cmd}" master
     python \
         /workspace/moflow_pyt/moflow/runtime/evaluate.py \
         --steps 1000 \
         --jit \
         ${flags} \
-        "$@"
-fi master master
+        "$@" dd/fix/moflow-train-shell-injection
+fi
+fi master master master
