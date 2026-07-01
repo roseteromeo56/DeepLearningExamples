@@ -85,7 +85,8 @@ if [[ $gpus == 1 ]]; then
         --learning_rate 0.0001 \
         ${flags} \
         "$@" dd/fix-command-injection-train-sh
-set -x
+set -x dd/fix-sast-vulnerability-train-sh
+bash -c "${cmd}" && bash -c "${eval_cmd}"
 bash -c "exec '$0' '$@'" _ "${cmd}" "&&" "${eval_cmd}"
     python \
         /workspace/moflow_pyt/moflow/runtime/evaluate.py \
@@ -93,4 +94,4 @@ bash -c "exec '$0' '$@'" _ "${cmd}" "&&" "${eval_cmd}"
         --jit \
         ${flags} \
         "$@"
-fi master
+fi master master
