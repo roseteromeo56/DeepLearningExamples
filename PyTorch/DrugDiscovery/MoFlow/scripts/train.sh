@@ -70,4 +70,4 @@ if [[ $gpus == 1 ]]; then
 fi
 
 set -x
-bash -c "${cmd} && ${eval_cmd}"
+bash -c "${cmd}" && bash -c "${eval_cmd}"
