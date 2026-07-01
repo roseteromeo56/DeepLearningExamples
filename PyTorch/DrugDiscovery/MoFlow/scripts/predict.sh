@@ -17,20 +17,26 @@
 
 bs=${1:-512}
 prec=${2:-amp}
-flags="${@:3}"
-
-
-cmd="python \
-    /workspace/moflow_pyt/moflow/runtime/generate.py \
-    --batch_size ${bs} \
-    --jit \
-    --correct_validity \
-    ${flags} \
-    "
-
-if [ $prec == "amp" ]; then
-    cmd="${cmd} --amp"
-fi
+flags=("${@:3}")
 
 set -x
-bash -c "${cmd}"
+
+# Build command array
+cmd=(
+    "python"
+    "/workspace/moflow_pyt/moflow/runtime/generate.py"
+    "--batch_size" "${bs}"
+    "--jit"
+    "--correct_validity"
+)
+
+# Add flags
+cmd+=("${flags[@]}")
+
+# Add amp flag if specified
+if [ "$prec" == "amp" ]; then
+    cmd+=("--amp")
+fi
+
+# Execute command directly
+exec "${cmd[@]}"
