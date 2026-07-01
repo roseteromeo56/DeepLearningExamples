@@ -20,7 +20,8 @@ prec=${2:-amp}
 flags="${@:3}"
 
 
-cmd="python \
+set -x
+python \
     /workspace/moflow_pyt/moflow/runtime/generate.py \
     --batch_size ${bs} \
     --steps 200 \
@@ -29,11 +30,18 @@ cmd="python \
     --predictions_path '' \
     --jit \
     ${flags} \
-    "
+    "$@"
 
 if [ $prec == "amp" ]; then
-    cmd="${cmd} --amp"
+    python \
+        /workspace/moflow_pyt/moflow/runtime/generate.py \
+        --batch_size ${bs} \
+        --steps 200 \
+        --warmup_steps 10 \
+        --allow_untrained \
+        --predictions_path '' \
+        --jit \
+        --amp \
+        ${flags} \
+        "$@"
 fi
-
-set -x
-bash -c "${cmd}"

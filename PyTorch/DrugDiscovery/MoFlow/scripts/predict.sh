@@ -28,8 +28,7 @@ cmd=(
     "--batch_size" "${bs}"
     "--jit"
     "--correct_validity"
-)
-
+) dd/fix-sast-vulnerability-predict-sh
 # Add flags
 cmd+=("${flags[@]}")
 
@@ -40,3 +39,22 @@ fi
 
 # Execute command directly
 exec "${cmd[@]}"
+set -x
+python \
+    /workspace/moflow_pyt/moflow/runtime/generate.py \
+    --batch_size ${bs} \
+    --jit \
+    --correct_validity \
+    ${flags} \
+    "$@"
+
+if [ $prec == "amp" ]; then
+    python \
+        /workspace/moflow_pyt/moflow/runtime/generate.py \
+        --batch_size ${bs} \
+        --jit \
+        --correct_validity \
+        --amp \
+        ${flags} \
+        "$@"
+fi master

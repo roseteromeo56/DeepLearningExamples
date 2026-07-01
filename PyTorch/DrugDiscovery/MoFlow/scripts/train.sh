@@ -47,27 +47,50 @@ else
     cmd="torchrun --nproc_per_node=${gpus}"
 fi
 
-cmd="${cmd} \
+set -x
+${cmd} \
     /workspace/moflow_pyt/moflow/runtime/train.py \
     --cuda_graph \
     ${flags} \
-    "
+    "$@"
 
-eval_cmd="python \
+python \
     /workspace/moflow_pyt/moflow/runtime/evaluate.py \
     --steps 1000 \
     --jit \
     ${flags} \
-    "
+    "$@"
 
 if [ $prec == "amp" ]; then
-    cmd="${cmd} --amp"
-    eval_cmd="${eval_cmd} --amp"
+    ${cmd} \
+        /workspace/moflow_pyt/moflow/runtime/train.py \
+        --cuda_graph \
+        --amp \
+        ${flags} \
+        "$@"
+
+    python \
+        /workspace/moflow_pyt/moflow/runtime/evaluate.py \
+        --steps 1000 \
+        --jit \
+        --amp \
+        ${flags} \
+        "$@"
 fi
 
 if [[ $gpus == 1 ]]; then
-    cmd="${cmd} --learning_rate 0.0001"
-fi
-
+    ${cmd} \
+        /workspace/moflow_pyt/moflow/runtime/train.py \
+        --cuda_graph \
+        --learning_rate 0.0001 \
+        ${flags} \
+        "$@" dd/fix-command-injection-train-sh
 set -x
-bash -c "${cmd} && ${eval_cmd}"
+bash -c "exec '$0' '$@'" _ "${cmd}" "&&" "${eval_cmd}"
+    python \
+        /workspace/moflow_pyt/moflow/runtime/evaluate.py \
+        --steps 1000 \
+        --jit \
+        ${flags} \
+        "$@"
+fi master
