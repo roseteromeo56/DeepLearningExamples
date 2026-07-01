@@ -48,7 +48,8 @@ else
     cmd="torchrun --nproc_per_node=${gpus}"
 fi
 
-cmd="${cmd} \
+set -x
+${cmd} \
     /workspace/moflow_pyt/moflow/runtime/train.py \
     --batch_size ${bs} \
     --steps 200 \
@@ -56,11 +57,17 @@ cmd="${cmd} \
     --save_epochs -1 \
     --cuda_graph \
     ${flags} \
-    "
+    "$@"
 
 if [ $prec == "amp" ]; then
-    cmd="${cmd} --amp"
+    ${cmd} \
+        /workspace/moflow_pyt/moflow/runtime/train.py \
+        --batch_size ${bs} \
+        --steps 200 \
+        --eval_epochs -1 \
+        --save_epochs -1 \
+        --cuda_graph \
+        --amp \
+        ${flags} \
+        "$@"
 fi
-
-set -x
-bash -c "${cmd}"
