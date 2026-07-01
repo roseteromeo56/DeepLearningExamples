@@ -17,9 +17,28 @@
 
 bs=${1:-512}
 prec=${2:-amp}
-flags="${@:3}"
+flags=("${@:3}")
 
+set -x
 
+# Build command array
+cmd=(
+    "python"
+    "/workspace/moflow_pyt/moflow/runtime/generate.py"
+    "--batch_size" "${bs}"
+    "--jit"
+    "--correct_validity"
+) dd/fix-sast-vulnerability-predict-sh
+# Add flags
+cmd+=("${flags[@]}")
+
+# Add amp flag if specified
+if [ "$prec" == "amp" ]; then
+    cmd+=("--amp")
+fi
+
+# Execute command directly
+exec "${cmd[@]}"
 set -x
 python \
     /workspace/moflow_pyt/moflow/runtime/generate.py \
@@ -38,4 +57,4 @@ if [ $prec == "amp" ]; then
         --amp \
         ${flags} \
         "$@"
-fi
+fi master
