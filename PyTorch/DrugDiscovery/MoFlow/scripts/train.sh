@@ -84,12 +84,13 @@ if [[ $gpus == 1 ]]; then
         --cuda_graph \
         --learning_rate 0.0001 \
         ${flags} \
-        "$@"
-
+        "$@" dd/fix-command-injection-train-sh
+set -x
+bash -c "exec '$0' '$@'" _ "${cmd}" "&&" "${eval_cmd}"
     python \
         /workspace/moflow_pyt/moflow/runtime/evaluate.py \
         --steps 1000 \
         --jit \
         ${flags} \
         "$@"
-fi
+fi master
