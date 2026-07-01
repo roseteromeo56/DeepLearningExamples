@@ -20,17 +20,22 @@ prec=${2:-amp}
 flags="${@:3}"
 
 
-cmd="python \
+set -x
+python \
     /workspace/moflow_pyt/moflow/runtime/generate.py \
     --batch_size ${bs} \
     --jit \
     --correct_validity \
     ${flags} \
-    "
+    "$@"
 
 if [ $prec == "amp" ]; then
-    cmd="${cmd} --amp"
+    python \
+        /workspace/moflow_pyt/moflow/runtime/generate.py \
+        --batch_size ${bs} \
+        --jit \
+        --correct_validity \
+        --amp \
+        ${flags} \
+        "$@"
 fi
-
-set -x
-bash -c "${cmd}"
