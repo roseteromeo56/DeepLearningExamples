@@ -59,7 +59,7 @@ python3 translate.py \
    --output /tmp/output \
    --model gnmt/model_best.pth \
    --batch-size ${BATCH_SIZE} \
-   --beam-size ${BEAM_SIZE} \
+   --beam-size "${BEAM_SIZE}" \
    --math ${MATH} \
    --warmup 1 \
    --target-bleu 24.3 \
