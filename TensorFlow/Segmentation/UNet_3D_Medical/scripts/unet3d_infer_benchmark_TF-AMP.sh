@@ -16,4 +16,4 @@
 # Usage:
 # bash examples/unet3d_infer_benchmark_TF-AMP.sh <path/to/dataset> <path/to/results/directory> <batch/size>
 
-python main.py --data_dir $1 --model_dir $2 --exec_mode predict --warmup_steps 20 --fold 0 --batch_size $3 --benchmark --amp --xla
+python main.py --data_dir "$1" --model_dir "$2" --exec_mode predict --warmup_steps 20 --fold 0 --batch_size "$3" --benchmark --amp --xla
