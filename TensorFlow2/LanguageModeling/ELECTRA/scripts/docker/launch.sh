@@ -18,12 +18,14 @@ NV_VISIBLE_DEVICES=${2:-"all"}
 DOCKER_BRIDGE=${3:-"host"}
 
 docker run -it --rm \
-  --gpus device=$NV_VISIBLE_DEVICES \
-  --net=$DOCKER_BRIDGE \
+  --gpus device="$NV_VISIBLE_DEVICES" \
+  --net="$DOCKER_BRIDGE" \
   --shm-size=1g \
   --ulimit memlock=-1 \
   --ulimit stack=67108864 \
   --privileged \
-  -e LD_LIBRARY_PATH='/workspace/install/lib/' \
+  -e LD_LIBRARY_PATH='/workspace/install/lib/' \ dd/fix/electra-launch-quoting
+  -v "$PWD":/workspace/electra \
+  electra "$CMD"
   -v "${PWD}:/workspace/electra" \
-  electra $CMD
+  electra $CMD master
