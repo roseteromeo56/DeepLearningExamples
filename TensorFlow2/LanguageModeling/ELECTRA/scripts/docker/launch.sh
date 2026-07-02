@@ -24,6 +24,8 @@ docker run -it --rm \
   --ulimit memlock=-1 \
   --ulimit stack=67108864 \
   --privileged \
-  -e LD_LIBRARY_PATH='/workspace/install/lib/' \
+  -e LD_LIBRARY_PATH='/workspace/install/lib/' \ dd/fix/electra-launch-quoting
   -v "$PWD":/workspace/electra \
   electra "$CMD"
+  -v "${PWD}:/workspace/electra" \
+  electra $CMD master
