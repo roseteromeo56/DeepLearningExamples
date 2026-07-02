@@ -25,5 +25,5 @@ docker run -it --rm \
   --ulimit stack=67108864 \
   --privileged \
   -e LD_LIBRARY_PATH='/workspace/install/lib/' \
-  -v $PWD:/workspace/electra \
+  -v "${PWD}:/workspace/electra" \
   electra $CMD
