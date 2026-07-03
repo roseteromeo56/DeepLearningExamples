@@ -32,7 +32,7 @@ SCRATCH_DIR="${OUTPUT_DIR}/raw"
 mkdir -p "${OUTPUT_DIR}"
 mkdir -p "${SCRATCH_DIR}"
 
-cd ${SCRATCH_DIR}
+cd "${SCRATCH_DIR}"
 git clone https://github.com/cocodataset/cocoapi.git
 cd cocoapi/PythonAPI && mv ../common ./
 
@@ -50,4 +50,4 @@ rm coco.py.updated
 
 cd "${OUTPUT_DIR}"
 tar -czf pycocotools-2.0.tar.gz -C "${SCRATCH_DIR}/cocoapi/" PythonAPI/
-rm -rf ${SCRATCH_DIR}
+rm -rf "${SCRATCH_DIR}"
