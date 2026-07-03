@@ -74,7 +74,7 @@ if [ ! -f ${RATINGS_PATH} ]; then
           echo "Dataset not found. Please download it from: https://grouplens.org/datasets/movielens/20m/ and put it in ${ZIP_PATH}"
           exit 1
         fi
-        unzip -u ${ZIP_PATH}  -d ${RAW_DATADIR}
+        unzip -u "${ZIP_PATH}" -d "${RAW_DATADIR}"
     else
       echo "File not found at ${RATINGS_PATH}. Aborting."
       exit 1
