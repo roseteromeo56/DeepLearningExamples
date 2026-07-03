@@ -17,16 +17,16 @@
 WORKSPACE=${1:-"/workspace/rn50v15_tf"}
 DATA_DIR=${2:-"/data"}
 
-OTHER=${@:3}
+OTHER_ARGS=("${@:3}")
+BIND_TO_SOCKET_ARGS=()
 
-if [[ ! -z "${BIND_TO_SOCKET}" ]]; then
-    BIND_TO_SOCKET="--bind-to socket"
+if [[ -n "${BIND_TO_SOCKET}" ]]; then
+    BIND_TO_SOCKET_ARGS=(--bind-to socket)
 fi
 
-mpiexec --allow-run-as-root ${BIND_TO_SOCKET} -np 8 python3 main.py --arch=resnext101-32x4d \
+mpiexec --allow-run-as-root "${BIND_TO_SOCKET_ARGS[@]}" -np 8 python3 main.py --arch=resnext101-32x4d \
     --mode=train_and_evaluate --iter_unit=epoch --num_iter=90 \
     --batch_size=64 --warmup_steps=100 --cosine_lr --label_smoothing 0.1 \
     --lr_init=0.256 --lr_warmup_epochs=8 --momentum=0.875 --weight_decay=6.103515625e-05 \
-    --data_dir=${DATA_DIR}/tfrecords --data_idx_dir=${DATA_DIR}/dali_idx \
-    --results_dir=${WORKSPACE}/results --weight_init=fan_in ${OTHER}
-
+    --data_dir="${DATA_DIR}/tfrecords" --data_idx_dir="${DATA_DIR}/dali_idx" \
+    --results_dir="${WORKSPACE}/results" --weight_init=fan_in "${OTHER_ARGS[@]}"
