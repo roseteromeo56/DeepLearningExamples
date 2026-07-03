@@ -16,9 +16,9 @@
 # Usage:
 # bash unet_TRAIN_FULL_TF-AMP.sh <number of GPUs> <path to dataset> <path to results directory> <batch size>
 
-horovodrun -np $1 python main.py --data_dir $2 --model_dir $3 --log_every 100 --max_steps 6400 --batch_size $4 --exec_mode train_and_evaluate --fold 0 --augment --xla > $3/log_FP32_${1}GPU_fold0.txt
-horovodrun -np $1 python main.py --data_dir $2 --model_dir $3 --log_every 100 --max_steps 6400 --batch_size $4 --exec_mode train_and_evaluate --fold 1 --augment --xla > $3/log_FP32_${1}GPU_fold1.txt
-horovodrun -np $1 python main.py --data_dir $2 --model_dir $3 --log_every 100 --max_steps 6400 --batch_size $4 --exec_mode train_and_evaluate --fold 2 --augment --xla > $3/log_FP32_${1}GPU_fold2.txt
-horovodrun -np $1 python main.py --data_dir $2 --model_dir $3 --log_every 100 --max_steps 6400 --batch_size $4 --exec_mode train_and_evaluate --fold 3 --augment --xla > $3/log_FP32_${1}GPU_fold3.txt
-horovodrun -np $1 python main.py --data_dir $2 --model_dir $3 --log_every 100 --max_steps 6400 --batch_size $4 --exec_mode train_and_evaluate --fold 4 --augment --xla > $3/log_FP32_${1}GPU_fold4.txt
-python runtime/parse_results.py --model_dir $3 --exec_mode convergence --env FP32_${1}GPU
+horovodrun -np "$1" python main.py --data_dir "$2" --model_dir "$3" --log_every 100 --max_steps 6400 --batch_size "$4" --exec_mode train_and_evaluate --fold 0 --augment --xla > "$3/log_FP32_${1}GPU_fold0.txt"
+horovodrun -np "$1" python main.py --data_dir "$2" --model_dir "$3" --log_every 100 --max_steps 6400 --batch_size "$4" --exec_mode train_and_evaluate --fold 1 --augment --xla > "$3/log_FP32_${1}GPU_fold1.txt"
+horovodrun -np "$1" python main.py --data_dir "$2" --model_dir "$3" --log_every 100 --max_steps 6400 --batch_size "$4" --exec_mode train_and_evaluate --fold 2 --augment --xla > "$3/log_FP32_${1}GPU_fold2.txt"
+horovodrun -np "$1" python main.py --data_dir "$2" --model_dir "$3" --log_every 100 --max_steps 6400 --batch_size "$4" --exec_mode train_and_evaluate --fold 3 --augment --xla > "$3/log_FP32_${1}GPU_fold3.txt"
+horovodrun -np "$1" python main.py --data_dir "$2" --model_dir "$3" --log_every 100 --max_steps 6400 --batch_size "$4" --exec_mode train_and_evaluate --fold 4 --augment --xla > "$3/log_FP32_${1}GPU_fold4.txt"
+python runtime/parse_results.py --model_dir "$3" --exec_mode convergence --env "FP32_${1}GPU"

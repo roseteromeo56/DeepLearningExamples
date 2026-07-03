@@ -20,11 +20,11 @@ export MODEL_REPOSITORY_PATH=${WORKSPACE_DIR}/model_store
 export SHARED_DIR=${WORKSPACE_DIR}/shared_dir
 
 echo "Preparing directories"
-mkdir -p ${WORKSPACE_DIR}
-mkdir -p ${DATASETS_DIR}
-mkdir -p ${CHECKPOINTS_DIR}
-mkdir -p ${MODEL_REPOSITORY_PATH}
-mkdir -p ${SHARED_DIR}
+mkdir -p "${WORKSPACE_DIR}"
+mkdir -p "${DATASETS_DIR}"
+mkdir -p "${CHECKPOINTS_DIR}"
+mkdir -p "${MODEL_REPOSITORY_PATH}"
+mkdir -p "${SHARED_DIR}"
 
 echo "Setting up environment"
 export MODEL_NAME=WidenDeep
