@@ -17,7 +17,7 @@
 curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
 echo "deb [arch=amd64] https://download.docker.com/linux/debian buster stable" > /etc/apt/sources.list.d/docker.list && \
 curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey| apt-key add - && \
-curl -s -L https://nvidia.github.io/nvidia-docker/$ID$VERSION_ID/nvidia-docker.list > /etc/apt/sources.list.d/nvidia-docker.list && \
+curl -s -L "https://nvidia.github.io/nvidia-docker/${ID}${VERSION_ID}/nvidia-docker.list" > /etc/apt/sources.list.d/nvidia-docker.list && \
 apt-get update && \
 apt-get install -y docker-ce docker-ce-cli containerd.io nvidia-docker2
 
