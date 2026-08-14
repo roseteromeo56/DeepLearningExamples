@@ -45,25 +45,26 @@ fi
 
 echo "Container nvidia build = " $NVIDIA_BUILD_ID
 
-PREC=""
+PREC=()
 if [ "$precision" = "fp16" ] ; then
-   PREC="--use_fp16"
+   PREC+=(--use_fp16)
 elif [ "$precision" = "fp32" ] || [ "$precision" = "tf32" ] ; then
-   PREC=""
+   PREC=()
 else
    echo "Unknown <precision> argument"
    exit -2
 fi
 
 if [ "$use_xla" = "true" ] ; then
-    PREC="$PREC --enable_xla"
+    PREC+=(--enable_xla)
     echo "XLA activated"
 fi
 
-mpi=""
-if [ $num_gpus -gt 1 ] ; then
-   mpi="mpiexec --allow-run-as-root -np $num_gpus"
-   horovod="--use_horovod"
+mpi=()
+horovod=()
+if [ "$num_gpus" -gt 1 ] ; then
+   mpi=(mpiexec --allow-run-as-root -np "$num_gpus")
+   horovod=(--use_horovod)
 fi
 
 #PHASE 1 Config
@@ -81,25 +82,24 @@ gbs_phase2=$(expr $train_batch_size_phase2 \* $num_accumulation_steps_phase2)
 train_steps_phase2=$(expr $train_steps_phase2 \* $gbs_phase1 \/ $gbs_phase2) # Adjust for batch size
 
 RESULTS_DIR_PHASE2=${RESULTS_DIR}/phase_2
-mkdir -m 777 -p $RESULTS_DIR_PHASE2
+mkdir -m 777 -p "$RESULTS_DIR_PHASE2"
 
 INPUT_FILES="$DATA_DIR/tfrecord/lower_case_1_seq_len_${seq_len}_max_pred_${max_pred_per_seq}_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5_shard_1472_test_split_10/books_wiki_en_corpus/training/*"
 EVAL_FILES="$DATA_DIR/tfrecord/lower_case_1_seq_len_${seq_len}_max_pred_${max_pred_per_seq}_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5_shard_1472_test_split_10/books_wiki_en_corpus/test"
 
-$mpi python /workspace/bert_tf2/run_pretraining.py \
-    --input_files=$INPUT_FILES \
-    --init_checkpoint=$PHASE1_CKPT \
-    --model_dir=$RESULTS_DIR_PHASE2 \
-    --bert_config_file=$BERT_CONFIG \
-    --train_batch_size=$train_batch_size_phase2 \
-    --max_seq_length=$seq_len \
-    --max_predictions_per_seq=$max_pred_per_seq \
-    --num_steps_per_epoch=$train_steps_phase2 --num_train_epochs=1 \
-    --steps_per_loop=$save_checkpoints_steps \
-    --save_checkpoint_steps=$save_checkpoints_steps \
-    --warmup_steps=$warmup_steps_phase2 \
-    --num_accumulation_steps=$num_accumulation_steps_phase2 \
-    --learning_rate=$learning_rate_phase2 \
+"${mpi[@]}" python /workspace/bert_tf2/run_pretraining.py \
+    "--input_files=$INPUT_FILES" \
+    "--init_checkpoint=$PHASE1_CKPT" \
+    "--model_dir=$RESULTS_DIR_PHASE2" \
+    "--bert_config_file=$BERT_CONFIG" \
+    "--train_batch_size=$train_batch_size_phase2" \
+    "--max_seq_length=$seq_len" \
+    "--max_predictions_per_seq=$max_pred_per_seq" \
+    "--num_steps_per_epoch=$train_steps_phase2" --num_train_epochs=1 \
+    "--steps_per_loop=$save_checkpoints_steps" \
+    "--save_checkpoint_steps=$save_checkpoints_steps" \
+    "--warmup_steps=$warmup_steps_phase2" \
+    "--num_accumulation_steps=$num_accumulation_steps_phase2" \
+    "--learning_rate=$learning_rate_phase2" \
     --optimizer_type=LAMB \
-    $horovod $PREC
-
+    "${horovod[@]}" "${PREC[@]}"
