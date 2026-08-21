@@ -20,20 +20,20 @@ set -a
 # A100 80GiB TF32: UPDATE_FREQ=1
 
 # IO
-: ${DATASET_DIR:="/datasets/LibriSpeech"}
-: ${TRAIN_SUBSET:="train-1h"}
-: ${OUTPUT_DIR:="results/finetune_base_1h"}
-: ${PRETRAINED_MODEL:=results/pretrain_base/wav2vec2_update400000.pt}
+: "${DATASET_DIR:=/datasets/LibriSpeech}"
+: "${TRAIN_SUBSET:=train-1h}"
+: "${OUTPUT_DIR:=results/finetune_base_1h}"
+: "${PRETRAINED_MODEL:=results/pretrain_base/wav2vec2_update400000.pt}"
 # Batching
-: ${NUM_GPUS:=8}
-: ${MAX_TOKENS:=3200000}
-: ${NUM_CONCAT_BATCHES:=1}
-: ${UPDATE_FREQ:=1}
+: "${NUM_GPUS:=8}"
+: "${MAX_TOKENS:=3200000}"
+: "${NUM_CONCAT_BATCHES:=1}"
+: "${UPDATE_FREQ:=1}"
 # Training
-: ${LEARNING_RATE:=0.00005}
-: ${FREEZE_FINETUNE_UPDATES:=10000}
-: ${MAX_UPDATE:=13000}
-: ${MASK_CHANNEL_PROB:=0.25}
-: ${MASK_PROB:=0.65}
+: "${LEARNING_RATE:=0.00005}"
+: "${FREEZE_FINETUNE_UPDATES:=10000}"
+: "${MAX_UPDATE:=13000}"
+: "${MASK_CHANNEL_PROB:=0.25}"
+: "${MASK_PROB:=0.65}"
 
 bash scripts/finetune_vox_960h.sh "$@"
