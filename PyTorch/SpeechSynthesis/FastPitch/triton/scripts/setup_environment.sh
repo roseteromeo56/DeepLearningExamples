@@ -13,18 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 WORKDIR="${WORKDIR:=$(pwd)}"
-export WORKSPACE_DIR=${WORKDIR}/workspace
-export DATASETS_DIR=${WORKSPACE_DIR}/datasets_dir
-export CHECKPOINT_DIR=${WORKSPACE_DIR}/checkpoint_dir
-export MODEL_REPOSITORY_PATH=${WORKSPACE_DIR}/model_store
-export SHARED_DIR=${WORKSPACE_DIR}/shared_dir
+export WORKSPACE_DIR="${WORKDIR}/workspace"
+export DATASETS_DIR="${WORKSPACE_DIR}/datasets_dir"
+export CHECKPOINT_DIR="${WORKSPACE_DIR}/checkpoint_dir"
+export MODEL_REPOSITORY_PATH="${WORKSPACE_DIR}/model_store"
+export SHARED_DIR="${WORKSPACE_DIR}/shared_dir"
 
 echo "Preparing directories"
-mkdir -p ${WORKSPACE_DIR}
-mkdir -p ${DATASETS_DIR}
-mkdir -p ${CHECKPOINT_DIR}
-mkdir -p ${MODEL_REPOSITORY_PATH}
-mkdir -p ${SHARED_DIR}
+mkdir -p "${WORKSPACE_DIR}"
+mkdir -p "${DATASETS_DIR}"
+mkdir -p "${CHECKPOINT_DIR}"
+mkdir -p "${MODEL_REPOSITORY_PATH}"
+mkdir -p "${SHARED_DIR}"
 
 echo "Setting up environment"
 export MODEL_NAME="FastPitch"
