@@ -17,19 +17,19 @@ nvidia-smi
 
 RESULTS_DIR='/results'
 CHECKPOINTS_DIR='/results/checkpoints'
-mkdir -p $CHECKPOINTS_DIR
+mkdir -p "$CHECKPOINTS_DIR"
 
-: ${SEED:=1}
-: ${LR:=0.000846}
-: ${WARMUP:=4000}
-: ${NUM_EPOCHS:=30}
-: ${BS:=5120}
-: ${NUM_GPU:=16}
+: "${SEED:=1}"
+: "${LR:=0.000846}"
+: "${WARMUP:=4000}"
+: "${NUM_EPOCHS:=30}"
+: "${BS:=5120}"
+: "${NUM_GPU:=16}"
 
-STAT_FILE=${RESULTS_DIR}/DGX2_fp32_${NUM_GPU}GPU.json
-DISTRIBUTED="-m torch.distributed.run --nproc_per_node=${NUM_GPU}"
+STAT_FILE="${RESULTS_DIR}/DGX2_fp32_${NUM_GPU}GPU.json"
+DISTRIBUTED=(-m torch.distributed.run "--nproc_per_node=${NUM_GPU}")
 
-python ${DISTRIBUTED} /workspace/translation/train.py \
+python "${DISTRIBUTED[@]}" /workspace/translation/train.py \
   /data/ \
   --arch transformer_wmt_en_de_big_t2t \
   --share-all-embeddings \
@@ -39,19 +39,19 @@ python ${DISTRIBUTED} /workspace/translation/train.py \
   --clip-norm 0.0 \
   --lr-scheduler inverse_sqrt \
   --warmup-init-lr 0.0 \
-  --warmup-updates ${WARMUP} \
-  --lr $LR \
+  --warmup-updates "${WARMUP}" \
+  --lr "$LR" \
   --min-lr 0.0 \
   --dropout 0.1 \
   --weight-decay 0.0 \
   --criterion label_smoothed_cross_entropy \
   --label-smoothing 0.1 \
-  --max-tokens ${BS} \
-  --seed ${SEED} \
-  --max-epoch ${NUM_EPOCHS} \
+  --max-tokens "${BS}" \
+  --seed "${SEED}" \
+  --max-epoch "${NUM_EPOCHS}" \
   --no-epoch-checkpoints \
   --fuse-layer-norm \
   --online-eval \
   --log-interval 500 \
-  --save-dir ${RESULTS_DIR} \
-  --stat-file ${STAT_FILE}
+  --save-dir "${RESULTS_DIR}" \
+  --stat-file "${STAT_FILE}"
