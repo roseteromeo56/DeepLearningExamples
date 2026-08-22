@@ -14,24 +14,34 @@
 
 #!/usr/bin/env bash
 
-SPEEDS=$1
-[ -n "$SPEEDS" ] && SPEED_FLAG="--speed $SPEEDS"
+SPEEDS=${1:-${SPEEDS:-}}
+SPEED_FLAG=()
+if [ -n "$SPEEDS" ]; then
+    read -r -a SPEED_VALUES <<< "$SPEEDS"
+    for SPEED in "${SPEED_VALUES[@]}"; do
+        if [[ ! "$SPEED" =~ ^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)([eE][+-]?[0-9]+)?$ ]]; then
+            printf 'Invalid speed value: %s\n' "$SPEED" >&2
+            exit 1
+        fi
+    done
+    SPEED_FLAG=(--speed "${SPEED_VALUES[@]}")
+fi
 
 python ./utils/convert_librispeech.py \
     --input_dir /datasets/LibriSpeech/train-clean-100 \
     --dest_dir /datasets/LibriSpeech/train-clean-100-wav \
     --output_json /datasets/LibriSpeech/librispeech-train-clean-100-wav.json \
-    $SPEED_FLAG
+    "${SPEED_FLAG[@]}"
 python ./utils/convert_librispeech.py \
     --input_dir /datasets/LibriSpeech/train-clean-360 \
     --dest_dir /datasets/LibriSpeech/train-clean-360-wav \
     --output_json /datasets/LibriSpeech/librispeech-train-clean-360-wav.json \
-    $SPEED_FLAG
+    "${SPEED_FLAG[@]}"
 python ./utils/convert_librispeech.py \
     --input_dir /datasets/LibriSpeech/train-other-500 \
     --dest_dir /datasets/LibriSpeech/train-other-500-wav \
     --output_json /datasets/LibriSpeech/librispeech-train-other-500-wav.json \
-    $SPEED_FLAG
+    "${SPEED_FLAG[@]}"
 
 
 python ./utils/convert_librispeech.py \
