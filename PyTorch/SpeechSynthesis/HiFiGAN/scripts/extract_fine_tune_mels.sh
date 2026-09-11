@@ -14,7 +14,7 @@ export OMP_NUM_THREADS=1
 : ${DATASET_FILELIST:=data/filelists/ljs_audio_pitch_text.txt}  # train + val + test
 : ${LOAD_PITCH_FROM_DISK:=true}
 : ${LOAD_MEL_FROM_DISK:=false}  # mel-spec of the original data
-: ${SAMPLING_RATE:=22050}
+: "${SAMPLING_RATE:=22050}"
 : ${FASTPITCH:="pretrained_models/fastpitch/nvidia_fastpitch_210824.pt"}
 
 mkdir -p "$OUTPUT_DIR"
