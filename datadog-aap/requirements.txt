@@ -1,0 +1,2 @@
+# Keep the security instrumentation isolated from the model-specific dependencies.
+ddtrace>=3.0,<4
