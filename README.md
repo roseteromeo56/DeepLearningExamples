@@ -91,6 +91,13 @@ These examples, along with our NVIDIA deep learning software stack, are provided
 ## NVIDIA support
 In each of the network READMEs, we indicate the level of support that will be provided. The range is from ongoing updates and improvements to a point-in-time release for thought leadership.
 
+## Datadog App and API Protection
+
+Python APIs or gateways that expose these models can opt in to Datadog runtime
+protection using the launcher and deployment guidance in
+[`datadog-aap/README.md`](datadog-aap/README.md). Model training and native
+Triton processes are not instrumented automatically.
+
 ## Glossary
 
 **Multinode Training**
