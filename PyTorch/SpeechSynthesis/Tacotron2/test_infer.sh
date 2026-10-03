@@ -93,7 +93,7 @@ python $TEST_PROGRAM \
        --input-length $INPUT_LENGTH \
        --log-file $NVLOG_FILE \
        --num-iters $NUM_ITERS \
-       --wn-channels $WN_CHANNELS \
+       --wn-channels "$WN_CHANNELS" \
        $RUN_MODE \
        |& tee $TMP_LOGFILE
 set +x
