@@ -16,7 +16,7 @@
 set -e
 
 DATASET_DIR="${DATASETS_DIR}/LJSpeech-1.1/LJSpeech-1.1_fastpitch"
-: ${F0_METHOD:="pyin"}
+: "${F0_METHOD:=pyin}"
 : ${ARGS="--extract-mels"}
 
 
@@ -28,6 +28,6 @@ if [ ! -d "${DATASET_DIR}/mels" ]; then
         --batch-size 1 \
         --dataset-path $DATASET_DIR \
         --extract-pitch \
-	--f0-method $F0_METHOD \
+	--f0-method "$F0_METHOD" \
 	$ARGS
 fi
