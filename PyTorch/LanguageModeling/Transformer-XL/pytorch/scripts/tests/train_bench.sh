@@ -43,10 +43,10 @@ REFERENCE_PERF=$(grep "${MATH},${GPU_COUNT},${GPU_NAME}" \
 
 if [ -z "${REFERENCE_PERF}" ]; then
    echo "WARNING: COULD NOT FIND REFERENCE PERFORMANCE FOR EXECUTED CONFIG"
-   TARGET_PERF=''
+   TARGET_PERF=()
 else
    PERF_THRESHOLD=$(awk 'BEGIN {print ('"${REFERENCE_PERF}"' * '"${PERF_TOLERANCE}"')}')
-   TARGET_PERF='--target_throughput '${PERF_THRESHOLD}
+   TARGET_PERF=(--target_throughput "${PERF_THRESHOLD}")
 fi
 
 cd $REPO_DIR
@@ -57,4 +57,4 @@ bash run_wt103_base.sh train "${GPU_COUNT}" \
    --debug \
    --no_eval \
    --log_interval 1 \
-   ${TARGET_PERF}
+   "${TARGET_PERF[@]}"
