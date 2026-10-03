@@ -3,7 +3,7 @@
 set -a
 
 : ${FILELIST:="phrases/benchmark_8_128.tsv"}
-: ${OUTPUT_DIR:="./output/audio_$(basename ${FILELIST} .tsv)"}
+: "${OUTPUT_DIR:="./output/audio_$(basename -- "${FILELIST}" .tsv)"}"
 : ${TORCHSCRIPT:=true}
 : ${BS_SEQUENCE:="1 4 8"}
 : ${WARMUP:=64}
