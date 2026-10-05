@@ -48,4 +48,4 @@ cat $FILELISTS_DIR/train-clean-100.ltr > $FILELISTS_DIR/train-full-960.ltr
 cat $FILELISTS_DIR/train-clean-360.ltr >> $FILELISTS_DIR/train-full-960.ltr
 cat $FILELISTS_DIR/train-other-500.ltr >> $FILELISTS_DIR/train-full-960.ltr
 
-python3 utils/generate_dictionary.py $FILELISTS_DIR/train-full-960.ltr $FILELISTS_DIR/dict.ltr.txt
+python3 utils/generate_dictionary.py "$FILELISTS_DIR/train-full-960.ltr" "$FILELISTS_DIR/dict.ltr.txt"
