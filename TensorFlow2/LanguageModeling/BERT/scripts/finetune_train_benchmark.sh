@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-echo "Container nvidia build = " $NVIDIA_BUILD_ID
+echo "Container nvidia build = $NVIDIA_BUILD_ID"
 
 bert_model=${1:-"large"}
 num_gpu=${2:-"8"}
