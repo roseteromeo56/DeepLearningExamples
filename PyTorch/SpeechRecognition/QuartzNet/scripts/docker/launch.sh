@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPT_DIR=$(cd $(dirname $0); pwd)
+SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 QN_REPO=${QN_REPO:-"${SCRIPT_DIR}/../.."}
 
 DATA_DIR=${1:-${DATA_DIR-${QN_REPO}"/datasets"}}
