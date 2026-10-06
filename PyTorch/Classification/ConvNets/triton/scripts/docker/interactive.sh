@@ -21,6 +21,6 @@ docker run -it --rm \
   --ulimit stack=67108864 \
   -e WORKDIR=$(pwd) \
   -e PYTHONPATH=$(pwd) \
-  -v $(pwd):$(pwd) \
+  -v $(pwd):"$(pwd)" \
   -w $(pwd) \
   resnet50:latest bash
