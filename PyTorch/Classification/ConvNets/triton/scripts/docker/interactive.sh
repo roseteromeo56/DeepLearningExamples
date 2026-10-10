@@ -22,5 +22,5 @@ docker run -it --rm \
   -e WORKDIR=$(pwd) \
   -e PYTHONPATH=$(pwd) \
   -v "$(pwd):$(pwd)" \
-  -w $(pwd) \
+  -w "$(pwd)" \
   resnet50:latest bash
