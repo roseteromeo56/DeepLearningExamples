@@ -21,6 +21,6 @@ docker run -it --rm \
   --ulimit stack=67108864 \
   --privileged \
   -e WORKDIR=$(pwd) \
-  -v $(pwd):$(pwd) \
+  -v "$(pwd)":$(pwd) \
   -v /var/run/docker.sock:/var/run/docker.sock \
   fastpitch:latest bash
