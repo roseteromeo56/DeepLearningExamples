@@ -90,7 +90,7 @@ if [[ $gpus == 1 ]]; then
         "$@" dd/fix-command-injection-train-sh
 set -x dd/fix-sast-vulnerability-train-sh
 bash -c "${cmd}" && bash -c "${eval_cmd}"
-bash -c "exec '$0' '$@'" _ "${cmd}" "&&" "${eval_cmd}" master master
+"$0" "$@"
     python \
         /workspace/moflow_pyt/moflow/runtime/evaluate.py \
         --steps 1000 \
