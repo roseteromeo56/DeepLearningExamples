@@ -38,66 +38,37 @@
 
 gpus=${1:-1}
 prec=${2:-amp}
-flags="${@:3}"
+flags=("${@:3}")
 
 
 if [[ "${gpus}" == "1" ]]; then
-    cmd="python"
+    cmd=(python)
 else
-    cmd="torchrun --nproc_per_node=${gpus}"
+    cmd=(torchrun "--nproc_per_node=${gpus}")
+fi
+
+cmd+=(
+    /workspace/moflow_pyt/moflow/runtime/train.py
+    --cuda_graph
+    "${flags[@]}"
+)
+
+eval_cmd=(
+    python
+    /workspace/moflow_pyt/moflow/runtime/evaluate.py
+    --steps 1000
+    --jit
+    "${flags[@]}"
+)
+
+if [[ "${prec}" == "amp" ]]; then
+    cmd+=(--amp)
+    eval_cmd+=(--amp)
+fi
+
+if [[ "${gpus}" == "1" ]]; then
+    cmd+=(--learning_rate 0.0001)
 fi
 
 set -x
-${cmd} \
-    /workspace/moflow_pyt/moflow/runtime/train.py \
-    --cuda_graph \
-    ${flags} \
-    "$@"
-
-python \
-    /workspace/moflow_pyt/moflow/runtime/evaluate.py \
-    --steps 1000 \
-    --jit \
-    ${flags} \
-    "$@"
-
-if [ $prec == "amp" ]; then
-    ${cmd} \
-        /workspace/moflow_pyt/moflow/runtime/train.py \
-        --cuda_graph \
-        --amp \
-        ${flags} \
-        "$@"
-
-    python \
-        /workspace/moflow_pyt/moflow/runtime/evaluate.py \
-        --steps 1000 \
-        --jit \
-        --amp \
-        ${flags} \
-        "$@"
-fi
-
-if [[ $gpus == 1 ]]; then
-    ${cmd} \
-        /workspace/moflow_pyt/moflow/runtime/train.py \
-        --cuda_graph \
-        --learning_rate 0.0001 \ dd/security/moflow-train-sh-fix
-        ${flags} \
-        "$@"
-        ${flags} \ dd/fix/moflow-train-shell-injection
-        "$@"
-        "$@" dd/fix-command-injection-train-sh
-set -x dd/fix-sast-vulnerability-train-sh
-bash -c "${cmd}" && bash -c "${eval_cmd}"
-bash -c "exec '$0' '$@'" _ "${cmd}" "&&" "${eval_cmd}" master master
-    python \
-        /workspace/moflow_pyt/moflow/runtime/evaluate.py \
-        --steps 1000 \
-        --jit \
-        ${flags} \ dd/security/moflow-train-sh-fix
-        "$@"
-fi
-        "$@" dd/fix/moflow-train-shell-injection
-fi
-fi master master master master
+"${cmd[@]}" && "${eval_cmd[@]}"
