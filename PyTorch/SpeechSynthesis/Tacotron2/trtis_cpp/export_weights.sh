@@ -53,7 +53,7 @@ TACOTRON2_PT="${1}"
 WAVEGLOW_PT="${2}"
 MODEL_DIR="$(realpath ${3})"
 
-TACOTRON2_DIR="$(dirname $(realpath ${TACOTRON2_PT}))"
+TACOTRON2_DIR="$(dirname "$(realpath ${TACOTRON2_PT})")"
 TACOTRON2_NAME="$(basename ${TACOTRON2_PT})"
 WAVEGLOW_DIR="$(dirname $(realpath ${WAVEGLOW_PT}))"
 WAVEGLOW_NAME="$(basename ${WAVEGLOW_PT})"
