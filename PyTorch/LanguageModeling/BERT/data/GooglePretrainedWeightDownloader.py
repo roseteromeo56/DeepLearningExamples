@@ -13,6 +13,7 @@
 
 import hashlib
 import os
+import shutil
 import urllib.request
 import zipfile
 
@@ -126,9 +127,29 @@ class GooglePretrainedWeightDownloader:
             handle.write(response.read())
 
           print('Unzipping', file)
-          zip = zipfile.ZipFile(file, 'r')
-          zip.extractall(self.save_path)
-          zip.close()
+          destination = os.path.realpath(self.save_path)
+          with zipfile.ZipFile(file, 'r') as archive:
+            def member_path(member):
+              path = os.path.realpath(os.path.join(destination, member.filename))
+              if (os.path.commonpath([destination, path]) != destination or
+                  (path == destination and not member.is_dir())):
+                raise ValueError('Unsafe ZIP member path: {}'.format(member.filename))
+              return path
+
+            members = archive.infolist()
+            # Reject unsafe members before writing any extracted files.
+            for member in members:
+              member_path(member)
+
+            for member in members:
+              # Resolve again in case earlier entries changed the filesystem.
+              path = member_path(member)
+              if member.is_dir():
+                os.makedirs(path, exist_ok=True)
+              else:
+                os.makedirs(os.path.dirname(path), exist_ok=True)
+                with archive.open(member) as src, open(path, 'wb') as dst:
+                  shutil.copyfileobj(src, dst)
 
           sha_dict = self.model_sha[model]
           for extracted_file in sha_dict:
