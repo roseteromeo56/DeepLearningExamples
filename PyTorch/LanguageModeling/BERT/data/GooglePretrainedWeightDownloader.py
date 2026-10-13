@@ -141,15 +141,68 @@ class GooglePretrainedWeightDownloader:
             for member in members:
               member_path(member)
 
-            for member in members:
-              # Resolve again in case earlier entries changed the filesystem.
-              path = member_path(member)
-              if member.is_dir():
-                os.makedirs(path, exist_ok=True)
-              else:
-                os.makedirs(os.path.dirname(path), exist_ok=True)
-                with archive.open(member) as src, open(path, 'wb') as dst:
-                  shutil.copyfileobj(src, dst)
+            if (os.open not in os.supports_dir_fd or
+                os.mkdir not in os.supports_dir_fd or
+                os.unlink not in os.supports_dir_fd or
+                not hasattr(os, 'O_NOFOLLOW') or
+                not hasattr(os, 'O_DIRECTORY')):
+              raise NotImplementedError('Secure ZIP extraction requires dir_fd and no-follow support')
+
+            destination_fd = os.open(
+              destination, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+            try:
+              def open_directory(components):
+                directory_fd = os.dup(destination_fd)
+                try:
+                  for component in components:
+                    try:
+                      child_fd = os.open(
+                        component,
+                        os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW,
+                        dir_fd=directory_fd)
+                    except FileNotFoundError:
+                      try:
+                        os.mkdir(component, dir_fd=directory_fd)
+                      except FileExistsError:
+                        pass
+                      child_fd = os.open(
+                        component,
+                        os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW,
+                        dir_fd=directory_fd)
+                    os.close(directory_fd)
+                    directory_fd = child_fd
+                  return directory_fd
+                except BaseException:
+                  os.close(directory_fd)
+                  raise
+
+              for member in members:
+                # Resolve again in case earlier entries changed the filesystem.
+                path = member_path(member)
+                relative_path = os.path.relpath(path, destination)
+                components = [] if relative_path == '.' else relative_path.split(os.sep)
+                if member.is_dir():
+                  directory_fd = open_directory(components)
+                  os.close(directory_fd)
+                else:
+                  directory_fd = open_directory(components[:-1])
+                  try:
+                    try:
+                      os.unlink(components[-1], dir_fd=directory_fd)
+                    except FileNotFoundError:
+                      pass
+                    with archive.open(member) as src:
+                      file_fd = os.open(
+                        components[-1],
+                        os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
+                        0o666,
+                        dir_fd=directory_fd)
+                      with os.fdopen(file_fd, 'wb') as dst:
+                        shutil.copyfileobj(src, dst)
+                  finally:
+                    os.close(directory_fd)
+            finally:
+              os.close(destination_fd)
 
           sha_dict = self.model_sha[model]
           for extracted_file in sha_dict:
@@ -176,4 +229,3 @@ class GooglePretrainedWeightDownloader:
 
     def listLocallyStoredWeights(self):
         pass
-
