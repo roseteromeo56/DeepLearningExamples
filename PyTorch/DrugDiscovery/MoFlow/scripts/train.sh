@@ -46,7 +46,7 @@ if [[ "${gpus}" == "1" ]]; then
 else
     cmd=(torchrun "--nproc_per_node=${gpus}")
 fi
-
+ dd/automation/security/moflow-shell-injection-6b066e19
 cmd+=(
     /workspace/moflow_pyt/moflow/runtime/train.py
     --cuda_graph
@@ -72,3 +72,50 @@ fi
 
 set -x
 "${cmd[@]}" && "${eval_cmd[@]}"
+set -x
+${cmd} \
+    /workspace/moflow_pyt/moflow/runtime/train.py \
+    --cuda_graph \
+    "${flags[@]}" \
+    "$@"
+
+python \
+    /workspace/moflow_pyt/moflow/runtime/evaluate.py \
+    --steps 1000 \
+    --jit \
+    "${flags[@]}" \
+    "$@"
+
+if [ $prec == "amp" ]; then
+    ${cmd} \
+        /workspace/moflow_pyt/moflow/runtime/train.py \
+        --cuda_graph \
+        --amp \
+        "${flags[@]}" \
+        "$@"
+
+    python \
+        /workspace/moflow_pyt/moflow/runtime/evaluate.py \
+        --steps 1000 \
+        --jit \
+        --amp \
+        "${flags[@]}" \
+        "$@"
+fi
+
+if [[ $gpus == 1 ]]; then
+    train_cmd=(python
+        /workspace/moflow_pyt/moflow/runtime/train.py
+        --cuda_graph
+        --learning_rate 0.0001
+        "${flags[@]}"
+        "$@")
+    "${train_cmd[@]}"
+
+    python \
+        /workspace/moflow_pyt/moflow/runtime/evaluate.py \
+        --steps 1000 \
+        --jit \
+        "${flags[@]}" \
+        "$@"
+fi master
