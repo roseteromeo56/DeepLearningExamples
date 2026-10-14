@@ -38,7 +38,7 @@
 
 gpus=${1:-1}
 prec=${2:-amp}
-flags="${@:3}"
+flags=("${@:3}")
 
 
 if [[ "${gpus}" == "1" ]]; then
@@ -51,14 +51,14 @@ set -x
 ${cmd} \
     /workspace/moflow_pyt/moflow/runtime/train.py \
     --cuda_graph \
-    ${flags} \
+    "${flags[@]}" \
     "$@"
 
 python \
     /workspace/moflow_pyt/moflow/runtime/evaluate.py \
     --steps 1000 \
     --jit \
-    ${flags} \
+    "${flags[@]}" \
     "$@"
 
 if [ $prec == "amp" ]; then
@@ -66,7 +66,7 @@ if [ $prec == "amp" ]; then
         /workspace/moflow_pyt/moflow/runtime/train.py \
         --cuda_graph \
         --amp \
-        ${flags} \
+        "${flags[@]}" \
         "$@"
 
     python \
@@ -74,30 +74,23 @@ if [ $prec == "amp" ]; then
         --steps 1000 \
         --jit \
         --amp \
-        ${flags} \
+        "${flags[@]}" \
         "$@"
 fi
 
 if [[ $gpus == 1 ]]; then
-    ${cmd} \
-        /workspace/moflow_pyt/moflow/runtime/train.py \
-        --cuda_graph \
-        --learning_rate 0.0001 \ dd/security/moflow-train-sh-fix
-        ${flags} \
-        "$@"
-        ${flags} \ dd/fix/moflow-train-shell-injection
-        "$@"
-        "$@" dd/fix-command-injection-train-sh
-set -x dd/fix-sast-vulnerability-train-sh
-bash -c "${cmd}" && bash -c "${eval_cmd}"
-"$0" "$@"
+    train_cmd=(python
+        /workspace/moflow_pyt/moflow/runtime/train.py
+        --cuda_graph
+        --learning_rate 0.0001
+        "${flags[@]}"
+        "$@")
+    "${train_cmd[@]}"
+
     python \
         /workspace/moflow_pyt/moflow/runtime/evaluate.py \
         --steps 1000 \
         --jit \
-        ${flags} \ dd/security/moflow-train-sh-fix
+        "${flags[@]}" \
         "$@"
 fi
-        "$@" dd/fix/moflow-train-shell-injection
-fi
-fi master master master master
