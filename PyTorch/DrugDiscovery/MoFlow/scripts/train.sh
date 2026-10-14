@@ -42,11 +42,36 @@ flags=("${@:3}")
 
 
 if [[ "${gpus}" == "1" ]]; then
-    cmd="python"
+    cmd=(python)
 else
-    cmd="torchrun --nproc_per_node=${gpus}"
+    cmd=(torchrun "--nproc_per_node=${gpus}")
+fi
+ dd/automation/security/moflow-shell-injection-6b066e19
+cmd+=(
+    /workspace/moflow_pyt/moflow/runtime/train.py
+    --cuda_graph
+    "${flags[@]}"
+)
+
+eval_cmd=(
+    python
+    /workspace/moflow_pyt/moflow/runtime/evaluate.py
+    --steps 1000
+    --jit
+    "${flags[@]}"
+)
+
+if [[ "${prec}" == "amp" ]]; then
+    cmd+=(--amp)
+    eval_cmd+=(--amp)
 fi
 
+if [[ "${gpus}" == "1" ]]; then
+    cmd+=(--learning_rate 0.0001)
+fi
+
+set -x
+"${cmd[@]}" && "${eval_cmd[@]}"
 set -x
 ${cmd} \
     /workspace/moflow_pyt/moflow/runtime/train.py \
@@ -93,4 +118,4 @@ if [[ $gpus == 1 ]]; then
         --jit \
         "${flags[@]}" \
         "$@"
-fi
+fi master
