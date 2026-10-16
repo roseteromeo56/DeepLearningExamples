@@ -9,7 +9,7 @@ BATCH_SIZE=${BATCH_SIZE:-16}
 ####
 
 set -e
-SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
+SCRIPT_DIR=$(cd "$(dirname "$0")"; pwd)
 TRITON_DIR=${SCRIPT_DIR}/..
 PROJECT_DIR=${TRITON_DIR}/..
 
