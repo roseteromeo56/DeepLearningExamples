@@ -23,5 +23,5 @@ docker run -it --rm \
     -v $(pwd):$(pwd) \
     -v /mnt/nvdl/usr/jzarzycki/nnunet_pyt/results:/data \
     -v /mnt/nvdl/usr/jzarzycki/nnunet_pyt/results:/results \
-    -w $(pwd) \
+    -w "$(pwd)" \
     nnunet:latest bash
