@@ -16,7 +16,7 @@
 
 trap "exit" INT
 
-SCRIPT_DIR=$(cd $(dirname $0); pwd)
+SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 PROJECT_DIR=${SCRIPT_DIR}/../..
 
 TRITON_CLIENT_CONTAINER_TAG=${TRITON_CLIENT_CONTAINER_TAG:-jasper:triton}
