@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-SCRIPT_DIR=$(cd $(dirname $0); pwd)
+SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 TRITON_DIR=${SCRIPT_DIR}/..
 
 DEPLOY_DIR=${DEPLOY_DIR:-${TRITON_DIR}/deploy}
