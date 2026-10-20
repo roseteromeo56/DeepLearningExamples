@@ -9,6 +9,6 @@ if [[ $# != 0 ]]; then
   exit 1
 fi
 
-FULLPATH="$(dirname $(realpath $0))"
+FULLPATH="$(dirname "$(realpath $0)")"
 
 docker build -f Dockerfile.trtis_client . -t "${IMAGE_NAME}"
