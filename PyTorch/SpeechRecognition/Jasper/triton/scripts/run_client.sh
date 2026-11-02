@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-SCRIPT_DIR=$(cd $(dirname $0); pwd)
+SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 PROJECT_DIR=${SCRIPT_DIR}/../..
 
 MODEL_TYPE=${1:-"ts-trace"}
