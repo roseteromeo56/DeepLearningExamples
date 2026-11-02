@@ -15,7 +15,7 @@
 # limitations under the License.
 
 
-SCRIPT_DIR=$(cd $(dirname $0); pwd)
+SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 
 : ${DATASET_DIR:=$SCRIPT_DIR/../../datasets}
 
