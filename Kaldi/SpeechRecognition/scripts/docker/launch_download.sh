@@ -19,6 +19,6 @@ docker run --rm \
    --ulimit memlock=-1 \
    --ulimit stack=67108864 \
    -v $PWD/data:/mnt/data \
-   triton_kaldi_server /workspace/scripts/docker/dataset_setup.sh $(id -u) $(id -g)
+   triton_kaldi_server /workspace/scripts/docker/dataset_setup.sh "$(id -u)" $(id -g)
 
 #   --user $(id -u):$(id -g) \
