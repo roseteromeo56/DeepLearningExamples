@@ -23,6 +23,6 @@ python ./multiproc.py  \
             --epochs 90 \
             --run-epochs $STAGE_LEN \
             $FLAGS \
-            --resume /results/checkpoint_$( expr $STAGE_ID - 1).pth.tar \
+            --resume /results/checkpoint_"$( expr $STAGE_ID - 1)".pth.tar \
             --checkpoint checkpoint_$STAGE_ID.pth.tar
 
