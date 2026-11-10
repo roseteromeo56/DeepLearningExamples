@@ -40,7 +40,7 @@ done
 
 export GPU=${GPU:-}
 
-SCRIPT_DIR=$(cd $(dirname $0); pwd)
+SCRIPT_DIR=$(cd "$(dirname $0)"; pwd)
 PROJECT_DIR=${SCRIPT_DIR}/../..
 MODEL_REPO=${MODEL_REPO:-"${PROJECT_DIR}/triton/deploy/model_repo"}
 
