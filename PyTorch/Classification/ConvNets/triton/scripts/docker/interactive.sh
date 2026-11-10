@@ -20,7 +20,7 @@ docker run -it --rm \
   --ulimit memlock=-1 \
   --ulimit stack=67108864 \
   -e WORKDIR=$(pwd) \
-  -e PYTHONPATH=$(pwd) \
+  -e PYTHONPATH="$(pwd)" \
   -v "$(pwd):$(pwd)" \
   -w "$(pwd)" \
   resnet50:latest bash
