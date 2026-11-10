@@ -19,7 +19,7 @@ docker run -it --rm \
   --shm-size=1g \
   --ulimit memlock=-1 \
   --ulimit stack=67108864 \
-  -e WORKDIR=$(pwd) \
+  -e WORKDIR="$(pwd)" \
   -e PYTHONPATH="$(pwd)" \
   -v "$(pwd):$(pwd)" \
   -w "$(pwd)" \
